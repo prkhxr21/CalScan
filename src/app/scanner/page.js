@@ -287,7 +287,7 @@ export default function Scanner() {
                         autoPlay
                         playsInline
                         muted
-                        className={`w-full h-full object-cover ${!isScanning ? 'hidden' : 'scale-x-[-1]'}`}
+                        className={`w-full h-full object-cover ${!isScanning ? 'hidden' : ''}`}
                     />
                     {!isScanning && (
                         <div className="absolute inset-0 flex items-center justify-center text-white">
@@ -342,7 +342,7 @@ export default function Scanner() {
                                 <img
                                     src={scannedData}
                                     alt="Captured Food"
-                                    className="w-full rounded-md border border-gray-300 scale-x-[-1]"
+                                    className="w-full rounded-md border border-gray-300"
                                 />
                             </div>
 
