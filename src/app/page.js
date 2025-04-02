@@ -317,7 +317,7 @@ export default function Scanner() {
                         muted
                         className={`w-full h-full object-cover ${!isScanning ? 'hidden' : ''}`}
                         style={{
-                            transform: isScanning ? 'scaleX(-1)' : 'none',
+                            transform: isScanning ? '' : 'none',
                             ...(windowSize.isMobile && {
                                 width: '100%',
                                 height: 'auto',
