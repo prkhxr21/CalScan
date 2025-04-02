@@ -1,4 +1,6 @@
 "use client";
+
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 
 export default function Scanner() {
@@ -14,31 +16,6 @@ export default function Scanner() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const streamRef = useRef(null);
-    // Add this useEffect to handle window resize
-    const [windowSize, setWindowSize] = useState({
-        width: 0,
-        height: 0,
-        isMobile: false
-    });
-
-    useEffect(() => {
-        // Only run on client-side
-        if (typeof window !== 'undefined') {
-            const handleResize = () => {
-                setWindowSize({
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    isMobile: window.innerWidth < 768
-                });
-            };
-
-            // Set initial values
-            handleResize();
-
-            window.addEventListener('resize', handleResize);
-            return () => window.removeEventListener('resize', handleResize);
-        }
-    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -122,7 +99,7 @@ export default function Scanner() {
     const analyzeWithGemini = async (imageData) => {
         setLoading(true);
         setCameraError(null);
-
+        
         try {
             const base64Data = imageData.split(',')[1];
             if (!base64Data) throw new Error("Invalid image data");
@@ -135,18 +112,18 @@ export default function Scanner() {
             });
             console.log(response);
             const result = await response.json();
-
+    
             if (!response.ok || !result.success) {
-                throw new Error(result.error || "Analysis failed");
+              throw new Error(result.error || "Analysis failed");
             }
-
+            
             if (!result.success) {
                 throw new Error(result.error || "Analysis failed");
             }
 
             // Gemini returns both identification and nutrition
             setPrediction({
-                name: result.foodName == "null" ? "No food found." : result.foodName,
+                name: result.foodName == "null"?  "No food found." : result.foodName ,
                 confidence: result.confidence
             });
 
@@ -305,27 +282,14 @@ export default function Scanner() {
                 )}
 
                 {/* Camera preview */}
-                <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg mb-4"
-                    style={{
-                        aspectRatio: windowSize.isMobile ? '4/3' : '16/9',
-                        maxWidth: '42rem'
-                    }}>
+                <div className="relative w-full max-w-2xl aspect-video bg-black rounded-lg overflow-hidden shadow-lg mb-4">
                     <video
                         ref={videoRef}
                         autoPlay
                         playsInline
                         muted
                         className={`w-full h-full object-cover ${!isScanning ? 'hidden' : ''}`}
-                        style={{
-                            transform: isScanning ? '' : 'none',
-                            ...(windowSize.isMobile && {
-                                width: '100%',
-                                height: 'auto',
-                                minHeight: '100%'
-                            })
-                        }}
                     />
-
                     {!isScanning && (
                         <div className="absolute inset-0 flex items-center justify-center text-white">
                             <p>Camera is off</p>
