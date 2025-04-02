@@ -122,7 +122,7 @@ export default function Scanner() {
 
             // Gemini returns both identification and nutrition
             setPrediction({
-                name: result.foodName,
+                name: result.foodName || "No food found :(",
                 confidence: result.confidence
             });
 
